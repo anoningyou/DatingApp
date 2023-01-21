@@ -51,6 +51,17 @@ namespace API.Data
             return await _context.Users.FindAsync(id);
         }
 
+        public async Task<bool> UserExistAsync(string username)
+        {
+            return await _context.Users.AnyAsync(u => u.UserName== username.ToLower());
+        }
+
+        public async Task AddUserAsync(AppUser user)
+        {
+            await _context.Users.AddAsync(user);
+        }
+
+
         public async Task<bool> SaveAllAsync()
         {
             return await _context.SaveChangesAsync()>0;
