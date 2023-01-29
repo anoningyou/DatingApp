@@ -12,5 +12,14 @@ namespace API.Extensions
             responce.Headers.Add("Pagination", JsonSerializer.Serialize(header, jsonOptions));
             responce.Headers.Add("Access-Control-Expose-Headers", "Pagination");
         }
+
+        public static void AddPaginationHeader<T>(this HttpResponse responce,
+            PagedList<T> list)
+        {
+            responce.AddPaginationHeader(new PaginationHeader(list.CurrentPage,list.PageSize,
+                list.TotalCount, list.TotalPages));
+        }
+
+        
     }
 }
