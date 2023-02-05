@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
+import ImageLinks from '../constants/image-links';
 import { User } from '../_models/user';
 import { AccountService } from '../_services/account.service';
 import { MembersService } from '../_services/members.service';
@@ -13,6 +14,7 @@ import { MembersService } from '../_services/members.service';
 })
 export class NavComponent implements OnInit {
   model: any = {};
+  userLinks = ImageLinks.user;
 
   constructor(public accountService:AccountService,
      private router: Router,

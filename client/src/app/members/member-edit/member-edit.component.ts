@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
+import ImageLinks from 'src/app/constants/image-links';
 import { Member } from 'src/app/_models/member';
 import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
@@ -21,6 +22,7 @@ export class MemberEditComponent implements OnInit {
   }
   member: Member |undefined;
   user: User | null = null;
+  userLinks = ImageLinks.user;
 
   constructor(private accountService: AccountService,
     private memberService: MembersService,

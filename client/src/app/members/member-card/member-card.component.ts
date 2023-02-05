@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import ImageLinks from 'src/app/constants/image-links';
 import { Member } from 'src/app/_models/member';
 import { MembersService } from 'src/app/_services/members.service';
 
@@ -10,6 +11,7 @@ import { MembersService } from 'src/app/_services/members.service';
 })
 export class MemberCardComponent implements OnInit {
   @Input() member: Member | undefined;
+  userLinks = ImageLinks.user;
 
   constructor(private memberService: MembersService, private toastr: ToastrService) { }
 
