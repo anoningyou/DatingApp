@@ -3,6 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import ImageLinks from 'src/app/constants/image-links';
 import { Member } from 'src/app/_models/member';
 import { MembersService } from 'src/app/_services/members.service';
+import { PresenceService } from 'src/app/_services/presence.service';
 
 @Component({
   selector: 'app-member-card',
@@ -13,7 +14,9 @@ export class MemberCardComponent implements OnInit {
   @Input() member: Member | undefined;
   userLinks = ImageLinks.user;
 
-  constructor(private memberService: MembersService, private toastr: ToastrService) { }
+  constructor(private memberService: MembersService,
+     private toastr: ToastrService,
+     public presenceService: PresenceService) { }
 
   ngOnInit(): void {
   }
