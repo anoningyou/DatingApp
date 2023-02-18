@@ -56,6 +56,13 @@ namespace API.Data
                 .SingleOrDefaultAsync(u=> u.UserName == username);
         }
 
+        public async Task<string> GetUserGender(string username)
+        {
+            return await _context.Users
+                .Where(u=>u.UserName == username)
+                .Select(u=>u.Gender).FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
         {
             return await _context.Users
@@ -67,23 +74,6 @@ namespace API.Data
         {
             return await _context.Users.FindAsync(id);
         }
-
-        public async Task<bool> UserExistAsync(string username)
-        {
-            return await _context.Users.AnyAsync(u => u.UserName== username.ToLower());
-        }
-
-        public async Task AddUserAsync(AppUser user)
-        {
-            await _context.Users.AddAsync(user);
-        }
-
-
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync()>0;
-        }
-
         public void Update(AppUser user)
         {
             _context.Entry(user).State = EntityState.Modified;
