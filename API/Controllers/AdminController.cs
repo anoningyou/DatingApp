@@ -1,4 +1,5 @@
 using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,8 +10,10 @@ namespace API.Controllers
     public class AdminController : BaseApiController
     {
         private readonly UserManager<AppUser> _userManager;
-        public AdminController(UserManager<AppUser> userManager)
+        private readonly IUnitOfWork _uow;
+        public AdminController(UserManager<AppUser> userManager, IUnitOfWork uow)
         {
+            _uow = uow;
             _userManager = userManager;
             
         }
@@ -59,9 +62,40 @@ namespace API.Controllers
 
         [Authorize(Policy = "ModeratePhotoRole")]
         [HttpGet("photos-to-moderate")]
-        public ActionResult GetPhotosForModeration()
+        public async Task<ActionResult> GetPhotosForModeration()
         {
-            return Ok("Admins or moderators can see this");
+            return Ok(await _uow.PhotoRepository.GetUnapprovedPhotos());
         }
+
+        [Authorize(policy: "ModeratePhotoRole")]
+        [HttpPut("approve-photo/{photoId}")]
+        public async Task<ActionResult> ApprovePhoto(int photoId)
+        {
+            var user = await _uow.UserRepository.GetUsersByPhotoIdAsync(photoId);
+            if(user==null) return NotFound();
+            var photo = user.Photos.FirstOrDefault(p=>p.Id == photoId);
+            photo.IsApproved = true;
+            if(!user.Photos.Any(p=> p.IsApproved==true && p.IsMain))
+                photo.IsMain = true;
+            if(await _uow.Complete()) 
+                return Ok();
+            else
+                return BadRequest("Failed to approve a photo");
+        }
+
+        [Authorize(policy: "ModeratePhotoRole")]
+        [HttpPut("reject-photo/{photoId}")]
+        public async Task<ActionResult> RejectPhoto(int photoId)
+        {
+            var photo = await _uow.PhotoRepository.GetPhotoById(photoId);
+            if(photo==null) return NotFound();
+            photo.IsApproved = false;
+            if(await _uow.Complete()) 
+                return Ok();
+            else
+                return BadRequest("Failed to reject a photo");
+        }
+
+
     }
 }

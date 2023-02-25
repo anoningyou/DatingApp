@@ -5,3 +5,18 @@
 input[type=file]{
     color: transparent;
 }
+.img-wrapper{
+    position: relative;
+}
+.unapproved-photo{
+    opacity: 0.2;
+}
+.awaiting-approval{
+    position: absolute;
+    color: red;
+    left:0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30%;
+}

@@ -18,9 +18,12 @@ namespace API.Data
             _context = context;
         }
 
-        public async Task<MemberDto> GetMemberAsync(string username)
+        public async Task<MemberDto> GetMemberAsync(string username, bool includeUnapprovedPhotos)
         {
-            return await _context.Users
+            var query = _context.Users.AsQueryable();
+            if(includeUnapprovedPhotos)
+                query = query.IgnoreQueryFilters();
+            return await query
                 .Where(u=>u.UserName == username)
                 .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
@@ -74,6 +77,16 @@ namespace API.Data
         {
             return await _context.Users.FindAsync(id);
         }
+
+        public async Task<AppUser> GetUsersByPhotoIdAsync(int PhotoId)
+        {
+            return await _context.Users
+                    .Include(u=>u.Photos)
+                    .IgnoreQueryFilters()
+                    .Where(u=>u.Photos.Any(p=>p.Id==PhotoId))
+                    .FirstOrDefaultAsync();
+        }
+
         public void Update(AppUser user)
         {
             _context.Entry(user).State = EntityState.Modified;

@@ -1,10 +1,19 @@
 <div class="row mb-3" *ngIf="member">
-    <div class="col-2 mb-1" *ngFor="let photo of member.photos">
-        <img src="{{photo.url}}" alt="photo of user" class="img-thumbnail mb-1">
+    <div class="col-2 mb-1 img-wrapper" *ngFor="let photo of member.photos">
+        <div class="text-center awaiting-approval" *ngIf="photo.isApproved===null||photo.isApproved===undefined">
+            Awaiting<br>approval
+        </div>
+        <div class="text-center awaiting-approval" *ngIf="photo.isApproved===false">
+            Rejected
+        </div>
+        <img src="{{photo.url}}" 
+            alt="photo of user" 
+            class="img-thumbnail mb-1"
+            [ngClass]="!photo.isApproved? 'unapproved-photo':''">
         <div class="text-center">
             <button 
                 class="btn btn-sm"
-                [disabled]="photo.isMain"
+                [disabled]="photo.isMain||!photo.isApproved"
                 (click)="setMainPhoto(photo)"
                 [ngClass]="photo.isMain? 'btn-success active':'btn-outline-success'"
             >Main</button>
