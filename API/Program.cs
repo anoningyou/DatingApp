@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using API.Data;
 using API.Entities;
 using API.Extensions;
@@ -30,11 +31,11 @@ else
         var pgUserPass = connUrl.Split("@")[0];
         var pgHostPortDb = connUrl.Split("@")[1];
         var pgHostPort = pgHostPortDb.Split("/")[0];
-        var pgDb = pgHostPortDb.Split("/")[1];
+        var pgDb = pgHostPortDb.Split("/")[1].Split("?")[0];
         var pgUser = pgUserPass.Split(":")[0];
         var pgPass = pgUserPass.Split(":")[1];
-        var pgHost = pgHostPort.Split(":")[0];
-        var pgPort = pgHostPort.Split(":")[1];
+        var pgHost = Regex.Match(pgHostPort,@"(?<=\[).+(?=])").Value;
+        var pgPort = Regex.Match(pgHostPort,@"\d+$").Value;
 
         connString = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};";
 }
