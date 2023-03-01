@@ -25,7 +25,6 @@ else
 {
 // Use connection string provided at runtime by FlyIO.
         connString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
-        Console.WriteLine(connString);
 }
 builder.Services.AddDbContext<DataContext>(opt =>
 {
