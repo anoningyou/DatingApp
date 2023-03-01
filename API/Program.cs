@@ -24,20 +24,8 @@ if (builder.Environment.IsDevelopment())
 else 
 {
 // Use connection string provided at runtime by FlyIO.
-        var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-
-        // Parse connection URL to connection string for Npgsql
-        connUrl = connUrl.Replace("postgres://", string.Empty);
-        var pgUserPass = connUrl.Split("@")[0];
-        var pgHostPortDb = connUrl.Split("@")[1];
-        var pgHostPort = pgHostPortDb.Split("/")[0];
-        var pgDb = pgHostPortDb.Split("/")[1].Split("?")[0];
-        var pgUser = pgUserPass.Split(":")[0];
-        var pgPass = pgUserPass.Split(":")[1];
-        var pgHost = Regex.Match(pgHostPort,@"(?<=\[).+(?=])").Value;
-        var pgPort = Regex.Match(pgHostPort,@"\d+$").Value;
-
-        connString = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};";
+        connString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
+        Console.WriteLine(connString);
 }
 builder.Services.AddDbContext<DataContext>(opt =>
 {
