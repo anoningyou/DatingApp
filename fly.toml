@@ -10,7 +10,7 @@ processes = []
 
 [env]
   ASPNETCORE_URLS="http://+:8080"
-  CloudinarySetting__CloudName="dvzojjedo"
+  CloudinarySettings__CloudName="dvzojjedo"
   CloudinarySettings__ApiKey="554742354563237"
 
 [experimental]
